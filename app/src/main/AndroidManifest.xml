@@ -10,13 +10,29 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".Medir"
+            android:name=".Analizar"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".Bluetooth"
+            android:label="@string/app_name">
+        </activity>
+        <activity
+            android:name=".Archivo"
+            android:label="@string/app_name">
+        </activity>
+        <activity
+            android:name=".Resultado"
+            android:label="@string/app_name">
+        </activity>
+        <activity
+            android:name=".Perfil"
+            android:label="@string/app_name">
         </activity>
     </application>
 
