@@ -8,6 +8,8 @@
     android:orientation="vertical"
     tools:context="com.aingerusanchez.healthybeat.Analizar">
 
+    <include layout="@layout/activity_base" />
+
     <FrameLayout
         android:id="@+id/content"
         android:layout_width="match_parent"
@@ -15,18 +17,10 @@
         android:layout_weight="1">
 
         <com.jjoe64.graphview.GraphView
+            android:id="@+id/graph"
             android:layout_width="match_parent"
-            android:layout_height="200dip"
-            android:id="@+id/graph"/>
+            android:layout_height="200dip" />
 
     </FrameLayout>
-
-    <android.support.design.widget.BottomNavigationView
-        android:id="@+id/navigation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:background="?android:attr/windowBackground"
-        app:menu="@menu/navigation" />
 
 </LinearLayout>

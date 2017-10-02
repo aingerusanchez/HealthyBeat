@@ -14,7 +14,8 @@
     <item
         android:id="@+id/navigation_analizar"
         android:icon="@drawable/ic_hearth_black_24dp"
-        android:title="@string/title_analizar" />
+        android:title="@string/title_analizar"
+        android:enabled="true"/>
 
     <item
         android:id="@+id/navigation_resultado"

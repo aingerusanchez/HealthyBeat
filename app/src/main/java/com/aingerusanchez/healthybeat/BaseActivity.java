@@ -6,19 +6,26 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 
-public class Archivo extends BaseActivity {
 
-    @Override
+public class BaseActivity extends AppCompatActivity {
+
+    /*@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_archivo);
+        setContentView(R.layout.activity_base);
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-        // Colocar el 2 item del menú como seleccionado
-        navigation.getMenu().getItem(1).setChecked(true);
+    }*/
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.navigation, menu);
+        return true;
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -64,5 +71,4 @@ public class Archivo extends BaseActivity {
         }
 
     };
-
 }
