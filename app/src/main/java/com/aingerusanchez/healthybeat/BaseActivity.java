@@ -10,65 +10,73 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 
-public class BaseActivity extends AppCompatActivity {
+public abstract class BaseActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
 
-    /*@Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_base);
-
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-    }*/
+    protected BottomNavigationView navigationView;
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.navigation, menu);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(getContentViewId());
+
+        navigationView = (BottomNavigationView) findViewById(R.id.navigation);
+        navigationView.setOnNavigationItemSelectedListener(this);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        updateNavigationBarState();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        overridePendingTransition(0, 0);
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        int itemId = item.getItemId();
+        if (itemId == R.id.navigation_bluetooth_menu) {
+            Intent bluetoothIntent = new Intent(getApplicationContext(), Bluetooth.class);
+            startActivity(bluetoothIntent);
+        } else if (itemId == R.id.navigation_archivo_menu) {
+            Intent archivoIntent = new Intent(getApplicationContext(), Archivo.class);
+            startActivity(archivoIntent);
+        } else if (itemId == R.id.navigation_analizar_menu) {
+            Intent analizarIntent = new Intent(getApplicationContext(), Analizar.class);
+            startActivity(analizarIntent);
+        } else if (itemId == R.id.navigation_resultado_menu) {
+            Intent resultadoIntent = new Intent(getApplicationContext(), Resultado.class);
+            startActivity(resultadoIntent);
+        } else if (itemId == R.id.navigation_perfil_menu) {
+            Intent perfilIntent = new Intent(getApplicationContext(), Perfil.class);
+            startActivity(perfilIntent);
+        }
+        finish();
         return true;
     }
 
-    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-            = new BottomNavigationView.OnNavigationItemSelectedListener() {
+    private void updateNavigationBarState(){
+        int actionId = getNavigationMenuItemId();
+        selectBottomNavigationBarItem(actionId);
+    }
 
-        //private TextView mTextMessage;
-
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.navigation_bluetooth:
-                    //mTextMessage.setText(R.string.title_bluetooth);
-                    Log.i("NavigationBar", String.valueOf(R.string.title_bluetooth));
-                    Intent bluetoothIntent = new Intent(getApplicationContext(), Bluetooth.class);
-                    startActivity(bluetoothIntent);
-                    return true;
-                case R.id.navigation_archivo:
-                    //mTextMessage.setText(R.string.title_archivo);
-                    Log.i("NavigationBar", String.valueOf(R.string.title_archivo));
-                    Intent archivoIntent = new Intent(getApplicationContext(), Archivo.class);
-                    startActivity(archivoIntent);
-                    return true;
-                case R.id.navigation_analizar:
-                    //mTextMessage.setText(R.string.title_analizar);
-                    Log.i("NavigationBar", String.valueOf(R.string.title_analizar));
-                    Intent analizarIntent = new Intent(getApplicationContext(), Analizar.class);
-                    startActivity(analizarIntent);
-                    return true;
-                case R.id.navigation_resultado:
-                    //mTextMessage.setText(R.string.title_resultado);
-                    Log.i("NavigationBar", String.valueOf(R.string.title_resultado));
-                    Intent resultadoIntent = new Intent(getApplicationContext(), Resultado.class);
-                    startActivity(resultadoIntent);
-                    return true;
-                case R.id.navigation_perfil:
-                    //mTextMessage.setText(R.string.title_perfil);
-                    Log.i("NavigationBar", String.valueOf(R.string.title_perfil));
-                    Intent perfilIntent = new Intent(getApplicationContext(), Perfil.class);
-                    startActivity(perfilIntent);
-                    return true;
+    void selectBottomNavigationBarItem(int itemId) {
+        Menu menu = navigationView.getMenu();
+        for (int i = 0, size = menu.size(); i < size; i++) {
+            MenuItem item = menu.getItem(i);
+            boolean shouldBeChecked = item.getItemId() == itemId;
+            if (shouldBeChecked) {
+                item.setChecked(true);
+                break;
             }
-            return false;
         }
+    }
 
-    };
+    abstract int getContentViewId();
+
+    abstract int getNavigationMenuItemId();
+
 }
