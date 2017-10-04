@@ -19,13 +19,18 @@ import com.jjoe64.graphview.series.LineGraphSeries;
 public class Analizar extends BaseActivity {
 
     @Override
+    int getContentViewId() {
+        return R.layout.activity_analizar;
+    }
+
+    @Override
+    int getNavigationMenuItemId() {
+        return R.id.navigation_analizar_menu;
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_analizar);
-
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
-        // Colocar el 2 item del menú como seleccionado
-        navigation.getMenu().getItem(2).setChecked(true);
 
         // ------------------------------------ GRAPHVIEW -----------------------------------------
         // Variable del gráfico
@@ -40,7 +45,7 @@ public class Analizar extends BaseActivity {
                 new DataPoint(4, 6)
         });
         series.setColor(Color.RED);
-        graph.addSeries(series);
+       graph.addSeries(series);
     }
     // ------------------------------------ END GRAPHVIEW -----------------------------------------
 
