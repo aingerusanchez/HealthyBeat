@@ -27,8 +27,7 @@
         </activity>
         <activity
             android:name=".Archivo"
-            android:label="@string/title_archivo">
-        </activity>
+            android:label="@string/title_archivo"></activity>
         <activity
             android:name=".Resultado"
             android:label="@string/title_resultado"></activity>
