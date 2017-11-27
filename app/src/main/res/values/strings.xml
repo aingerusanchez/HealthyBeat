@@ -1,9 +1,14 @@
 <resources>
+    <!--Textos-->
     <string name="app_name">HealthyBeat</string>
+    <string name="bluetooth">Bluetooth</string>
     <!-- Iconos del menú de navegación -->
     <string name="title_bluetooth">Bluetooth</string>
     <string name="title_archivo">Archivo</string>
     <string name="title_analizar">Analizar</string>
     <string name="title_resultado">Resultado</string>
     <string name="title_perfil">Perfil</string>
+    <!--Mensajes de información-->
+    <string name="bluetooth_not_supported">Este dispositivo no soporta Bluetooth</string>
+
 </resources>

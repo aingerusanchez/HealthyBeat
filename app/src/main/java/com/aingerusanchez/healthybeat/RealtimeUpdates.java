@@ -1,26 +1,8 @@
 package com.aingerusanchez.healthybeat;
 
-import android.app.Activity;
-import android.app.Fragment;
-import android.os.Bundle;
-import android.os.Handler;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
-import com.jjoe64.graphview.GraphView;
-import com.jjoe64.graphview.series.DataPoint;
-import com.jjoe64.graphview.series.LineGraphSeries;
-
-import java.util.Random;
-
 /**
  * Created by Aingeru on 27/06/2017.
  */
-
-import com.jjoe64.graphview.series.DataPoint;
-
-import java.util.Random;
 
 /*public class RealtimeUpdates extends Fragment {
     private final Handler mHandler = new Handler();
