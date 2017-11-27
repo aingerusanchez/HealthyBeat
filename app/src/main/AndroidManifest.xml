@@ -14,7 +14,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".Analizar"
-            android:label="@string/app_name">
+            android:label="@string/title_analizar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -23,17 +23,18 @@
         </activity>
         <activity
             android:name=".Bluetooth"
-            android:label="@string/app_name">
+            android:label="@string/title_bluetooth">
         </activity>
         <activity
             android:name=".Archivo"
-            android:label="@string/app_name"></activity>
+            android:label="@string/title_archivo">
+        </activity>
         <activity
             android:name=".Resultado"
-            android:label="@string/app_name"></activity>
+            android:label="@string/title_resultado"></activity>
         <activity
             android:name=".Perfil"
-            android:label="@string/app_name"></activity>
+            android:label="@string/title_perfil"></activity>
     </application>
 
 </manifest>
