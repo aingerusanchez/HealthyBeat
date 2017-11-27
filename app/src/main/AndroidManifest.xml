@@ -23,17 +23,16 @@
         </activity>
         <activity
             android:name=".Bluetooth"
-            android:label="@string/title_bluetooth">
-        </activity>
+            android:label="@string/title_bluetooth" />
         <activity
             android:name=".Archivo"
-            android:label="@string/title_archivo"></activity>
+            android:label="@string/title_archivo" />
         <activity
             android:name=".Resultado"
-            android:label="@string/title_resultado"></activity>
+            android:label="@string/title_resultado" />
         <activity
             android:name=".Perfil"
-            android:label="@string/title_perfil"></activity>
+            android:label="@string/title_perfil" />
     </application>
 
 </manifest>

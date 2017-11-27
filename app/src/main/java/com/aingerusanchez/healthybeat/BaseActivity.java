@@ -12,7 +12,7 @@ import android.widget.Toolbar;
 
 public abstract class BaseActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
 
-    protected BottomNavigationView navigationView;
+    private BottomNavigationView navigationView;
     protected Toolbar toolbar;
 
     @Override
@@ -20,7 +20,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
         super.onCreate(savedInstanceState);
         setContentView(getContentViewId());
 
-        navigationView = (BottomNavigationView) findViewById(R.id.navigation);
+        navigationView = findViewById(R.id.navigation);
         navigationView.setOnNavigationItemSelectedListener(this);
     }
 
@@ -64,7 +64,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
         selectBottomNavigationBarItem(actionId);
     }
 
-    void selectBottomNavigationBarItem(int itemId) {
+    private void selectBottomNavigationBarItem(int itemId) {
         Menu menu = navigationView.getMenu();
         for (int i = 0, size = menu.size(); i < size; i++) {
             MenuItem item = menu.getItem(i);
