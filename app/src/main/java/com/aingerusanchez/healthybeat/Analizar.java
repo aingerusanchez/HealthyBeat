@@ -1,11 +1,6 @@
 package com.aingerusanchez.healthybeat;
 
-import android.graphics.Color;
 import android.os.Bundle;
-
-import com.jjoe64.graphview.GraphView;
-import com.jjoe64.graphview.series.DataPoint;
-import com.jjoe64.graphview.series.LineGraphSeries;
 
 public class Analizar extends BaseActivity {
 
@@ -23,7 +18,7 @@ public class Analizar extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // ------------------------------------ GRAPHVIEW -----------------------------------------
+        /*// ------------------------------------ GRAPHVIEW -----------------------------------------
         // Variable del gráfico
         GraphView graph = (GraphView) findViewById(R.id.graph);
 
@@ -36,9 +31,8 @@ public class Analizar extends BaseActivity {
                 new DataPoint(4, 6)
         });
         series.setColor(Color.RED);
-       graph.addSeries(series);
+        graph.addSeries(series);
+        // ------------------------------------ END GRAPHVIEW -----------------------------------------*/
     }
-    // ------------------------------------ END GRAPHVIEW -----------------------------------------
-
 
 }

@@ -10,5 +10,7 @@
     <string name="title_perfil">Perfil</string>
     <!--Mensajes de información-->
     <string name="bluetooth_not_supported">Este dispositivo no soporta Bluetooth</string>
+    <!--Textos de la actividad ANÁLISIS-->
+    <string name="analisis_actual">Análisis actual:</string>
 
 </resources>
