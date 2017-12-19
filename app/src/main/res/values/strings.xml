@@ -1,16 +1,31 @@
 <resources>
-    <!--Textos-->
+    <!--Textos generales-->
     <string name="app_name">HealthyBeat</string>
     <string name="bluetooth">Bluetooth</string>
+    <!--Diálogos-->
+    <string name="aceptar">Aceptar</string>
+    <string name="cancelar">Cancelar</string>
+    <string name="desea_activar">¿Desea activarlo?</string>
+    <!--Botones-->
+    <string name="scan">Escanear</string>
+    <string name="button_connect">Conectar</string>
+    <string name="button_disconnect">Desconectar</string>
     <!-- Iconos del menú de navegación -->
     <string name="title_bluetooth">Bluetooth</string>
     <string name="title_archivo">Archivo</string>
     <string name="title_analizar">Analizar</string>
     <string name="title_resultado">Resultado</string>
     <string name="title_perfil">Perfil</string>
-    <!--Mensajes de información-->
-    <string name="bluetooth_not_supported">Este dispositivo no soporta Bluetooth</string>
     <!--Textos de la actividad ANÁLISIS-->
     <string name="analisis_actual">Análisis actual:</string>
+    <string name="detener_analisis">detener</string>
+    <!--Textos de la actividad BLUETOOTH-->
+    <string name="dispositivo_incompatible">Dispositivo no compatible</string>
+    <string name="bluetooth_no_soportado">Este dispositivo no soporta Bluetooth</string>
+    <string name="bluetooth_desactivado">Bluetooth desactivado</string>
+    <string name="debe_activar_bluetooth">Debe activar el Bluetooth para usar las funciones de análisis</string>
+    <string name="title_devices">Dispositivos</string>
+    <string name="mac_address">MAC Address</string>
+    <string name="escaneando">Escaneando...</string>
 
 </resources>

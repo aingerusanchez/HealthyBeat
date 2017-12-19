@@ -7,13 +7,11 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toolbar;
 
 
 public abstract class BaseActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
 
     private BottomNavigationView navigationView;
-    protected Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +34,12 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
         super.onPause();
         overridePendingTransition(0, 0);
     }
+
+    // TODO: gestionar el botón BACK de Android para volver a la anterior activity
+    /*@Override
+    public void onBackPressed() {
+
+    }*/
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {

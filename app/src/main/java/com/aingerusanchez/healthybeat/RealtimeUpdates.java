@@ -1,9 +1,5 @@
 package com.aingerusanchez.healthybeat;
 
-/**
- * Created by Aingeru on 27/06/2017.
- */
-
 /*public class RealtimeUpdates extends Fragment {
     private final Handler mHandler = new Handler();
     private Runnable mTimer1;

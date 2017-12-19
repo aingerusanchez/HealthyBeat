@@ -1,44 +1,101 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!--<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.aingerusanchez.healthybeat.Bluetooth">
+    tools:context="com.aingerusanchez.healthybeat.Bluetooth" >-->
+    <!--android:id="@+id/container"-->
 
-    <LinearLayout
-        android:id="@+id/content"
+    <!--<LinearLayout
+        android:id="@+id/container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:orientation="vertical">
+        android:layout_height="match_parent"
+        android:layout_marginBottom="52dp"
+        android:orientation="vertical"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/navigation"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
-        <Switch
-            android:id="@+id/switch_bluetooth"
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/tv_dispositivos"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:text="@string/bluetooth"
-            android:textSize="20sp" />
+            android:layout_gravity="center_horizontal|top"
+            android:layout_marginBottom="2dp"
+            android:layout_marginTop="-10dp"
+            android:text="@string/title_devices"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="#000"
+            android:textSize="60sp" />
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#000"
+            android:paddingTop="10dp" />
+
+        <ListView
+            android:id="@android:id/list"
+            android:layout_width="match_parent"
+            android:layout_height="330dp"
+            android:dividerHeight="2dp"
+            android:scrollbars="vertical" />
+
+        <!TODO: Colocar el botón bajo la lista de dispositivos y sobre el menú de navegación->
+        <!-
+        <FrameLayout
+            android:id="@+id/lyt_btn_scan"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ToggleButton
+                android:id="@+id/scan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:checked="false"
+                android:text="@string/scan"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="#fff"
+                android:textOff="@string/scan"
+                android:textOn="@string/escaneando" />
+
+        </FrameLayout>
     </LinearLayout>
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" />
-    </ScrollView>
 
     <include
+        android:id="@+id/navigation"
         layout="@layout/activity_base"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom" />
+        android:layout_alignParentBottom="true"
+        android:layout_below="@id/container"
+        android:layout_weight="1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="MissingConstraints" />
 
-</LinearLayout>
+    </android.support.constraint.ConstraintLayout>
+    -->
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Bluetooth"
+    android:id="@+id/container">
+
+
+    <include
+        android:id="@+id/navigation"
+        layout="@layout/activity_base"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true" />
+
+</RelativeLayout>

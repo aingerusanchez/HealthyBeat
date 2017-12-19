@@ -29,6 +29,13 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
         android:textStyle="bold" />
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginStart="10dp"
+        android:background="#000" />
+
     <TableLayout
         android:id="@+id/lv_pleth_data"
         android:layout_width="match_parent"
@@ -137,17 +144,20 @@
     </TableLayout>
 
     <FrameLayout
-        android:id="@+id/lyt_btn_container"
+        android:id="@+id/lyt_btn_analizar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom">
 
-        <Button
+        <ToggleButton
             android:id="@+id/btn_analizar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="@string/title_analizar" />
+            android:checked="false"
+            android:text="@string/title_analizar"
+            android:textOff="@string/title_analizar"
+            android:textOn="@string/detener_analisis" />
 
     </FrameLayout>
 
