@@ -2,10 +2,13 @@
     <!--Textos generales-->
     <string name="app_name">HealthyBeat</string>
     <string name="bluetooth">Bluetooth</string>
-    <!--Diálogos-->
+    <!--Diálogos y Toast-->
     <string name="aceptar">Aceptar</string>
     <string name="cancelar">Cancelar</string>
     <string name="desea_activar">¿Desea activarlo?</string>
+    <string name="pulsar_otra_vez_pasa_salir">Vuelva a pulsar ATRAS para salir</string>
+    <string name="salir_healthybeat">Salir de HealthyBeat</string>
+    <string name="confirmar_salida">¿Está seguro de que desea salir de HealthyBeat?</string>
     <!--Botones-->
     <string name="scan">Escanear</string>
     <string name="button_connect">Conectar</string>

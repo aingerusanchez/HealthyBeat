@@ -1,5 +1,7 @@
 package com.aingerusanchez.healthybeat;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -12,12 +14,14 @@ import android.view.MenuItem;
 public abstract class BaseActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
 
     private BottomNavigationView navigationView;
+    private int backpress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getContentViewId());
         setTitle(this.getLocalClassName());
+        backpress = 0;
 
         navigationView = findViewById(R.id.navigation);
         navigationView.setOnNavigationItemSelectedListener(this);
@@ -36,10 +40,32 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
     }
 
     // TODO: gestionar el botón BACK de Android para volver a la anterior activity
-    /*@Override
-    public void onBackPressed() {
+    @Override
+    public void onBackPressed(){
+        backpress = (backpress + 1);
+        //Toast.makeText(getApplicationContext(), " Press Back again to Exit ", Toast.LENGTH_SHORT).show();
 
-    }*/
+        if (backpress>1) {
+            backpress = 0;
+
+            new AlertDialog.Builder(this)
+                    .setTitle(R.string.salir_healthybeat)
+                    .setMessage(R.string.confirmar_salida)
+                    .setPositiveButton(R.string.aceptar, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            System.exit(0);
+                        }
+                    })
+                    .setNegativeButton(R.string.cancelar, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    })
+                    //.setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
+
+        }
+    }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
