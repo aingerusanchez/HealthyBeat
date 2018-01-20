@@ -12,7 +12,7 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="@string/title_devices"
         android:textColor="#000"
-        android:textSize="60dp"
+        android:textSize="60sp"
         android:id="@+id/textView"
         android:layout_gravity="center_horizontal|top"
         android:layout_marginTop="10dp"
@@ -22,21 +22,30 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="#000"/>
-    <ToggleButton
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:text="@string/scan"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textColor="#fff"
-        android:textSize="40dp"
-        android:id="@+id/scan"
-        android:layout_gravity="center_horizontal"
-        android:textOff="@string/scan"
-        android:textOn="@string/escaneando" />
 
     <ListView android:id="@android:id/list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        />
+        android:layout_weight="1" />
+
+    <FrameLayout
+        android:id="@+id/lyt_btn_scan"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="2dp">
+
+        <ToggleButton
+            android:id="@+id/scan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:checked="false"
+            android:text="@string/scan"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="#fff"
+            android:textOff="@string/scan"
+            android:textOn="@string/escaneando" />
+
+    </FrameLayout>
 
 </LinearLayout>

@@ -8,4 +8,5 @@
     android:layout_gravity="bottom"
     app:menu="@menu/navigation"
     android:layout_alignParentBottom="true"
+    android:elevation="4dp"
     />

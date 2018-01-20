@@ -147,7 +147,8 @@
         android:id="@+id/lyt_btn_analizar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom">
+        android:layout_gravity="bottom"
+        android:elevation="2dp" >
 
         <ToggleButton
             android:id="@+id/btn_analizar"

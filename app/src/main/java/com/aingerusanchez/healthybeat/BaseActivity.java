@@ -39,7 +39,6 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
         overridePendingTransition(0, 0);
     }
 
-    // TODO: gestionar el botón BACK de Android para volver a la anterior activity
     @Override
     public void onBackPressed(){
         backpress = (backpress + 1);
@@ -58,7 +57,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
                     })
                     .setNegativeButton(R.string.cancelar, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
-
+                            dialog.cancel();
                         }
                     })
                     //.setIcon(android.R.drawable.ic_dialog_alert)

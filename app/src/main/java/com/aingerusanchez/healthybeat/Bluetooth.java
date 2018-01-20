@@ -17,6 +17,7 @@ public class Bluetooth extends BaseActivity implements DeviceListFragment.OnFrag
     // Constantes
     public static int REQUEST_BLUETOOTH = 1;
 
+
     @Override
     int getContentViewId() {
         return R.layout.activity_bluetooth;
@@ -61,11 +62,15 @@ public class Bluetooth extends BaseActivity implements DeviceListFragment.OnFrag
         mDeviceListFragment = DeviceListFragment.newInstance(BTAdapter);
         fragmentManager.beginTransaction().replace(R.id.container, mDeviceListFragment).commit();
 
+        /*Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);*/
+
     }
 
     @Override
     public void onFragmentInteraction(String id) {
-
+        Toast tstConnecting = Toast.makeText(this, "Conectando...", Toast.LENGTH_LONG);
+        tstConnecting.show();
     }
 
     public void comprobarBluetooth(BluetoothAdapter BTAdapter) {
@@ -95,4 +100,7 @@ public class Bluetooth extends BaseActivity implements DeviceListFragment.OnFrag
                     .show();
         }
     }
+
+
+
 }
