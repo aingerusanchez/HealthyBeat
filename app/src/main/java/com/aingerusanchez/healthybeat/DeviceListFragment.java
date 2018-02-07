@@ -296,7 +296,7 @@ public class DeviceListFragment extends Fragment implements AbsListView.OnItemCl
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Reimplementar este método para que la clase Bluetooth reaccione a los cambios sucecidos en el Frament
+        // TODO: Reimplementar OnFragmentInteractionListener para que la clase Bluetooth reaccione a las pulsaciones del Menú de navegación
         public void onFragmentInteraction(String id);
     }
 

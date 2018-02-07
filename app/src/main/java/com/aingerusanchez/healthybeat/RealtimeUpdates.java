@@ -11,11 +11,16 @@ package com.aingerusanchez.healthybeat;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_main2, container, false);
+        View rootView = inflater.inflate(R.layout.activity_analizar, container, false);
 
         GraphView graph = (GraphView) rootView.findViewById(R.id.graph);
         mSeries1 = new LineGraphSeries<>(generateData());
         graph.addSeries(mSeries1);
+        graph.getViewport().setXAxisBoundsManual(true);
+        graph.getViewport().setMinX(0);
+        graph.getViewport().setMaxX(40);
+        graph.getViewport().setScrollable(true);
+
 
         GraphView graph2 = (GraphView) rootView.findViewById(R.id.graph2);
         mSeries2 = new LineGraphSeries<>();
@@ -24,11 +29,13 @@ package com.aingerusanchez.healthybeat;
         graph2.getViewport().setMinX(0);
         graph2.getViewport().setMaxX(40);
 
+
+
         return rootView;
     }
 
-    @Override
-    public void onAttach(Activity activity) {
+    /*@Override*/
+    /*public void onAttach(Activity activity) {
         super.onAttach(activity);
         ((Analizar) activity).onSectionAttached(
                 getArguments().getInt(Analizar.ARG_SECTION_NUMBER));
@@ -64,13 +71,14 @@ package com.aingerusanchez.healthybeat;
         super.onPause();
     }
 
+    // Método para rellenar los puntos del gráfico
     private DataPoint[] generateData() {
         int count = 30;
         DataPoint[] values = new DataPoint[count];
         for (int i=0; i<count; i++) {
             double x = i;
             double f = mRand.nextDouble()*0.15+0.3;
-            double y = Math.sin(i*f+2) + mRand.nextDouble()*0.3;
+            double y = ;
             DataPoint v = new DataPoint(x, y);
             values[i] = v;
         }
@@ -82,5 +90,4 @@ package com.aingerusanchez.healthybeat;
     private double getRandom() {
         return mLastRandom += mRand.nextDouble()*0.5 - 0.25;
     }
-}
-*/
+}*/

@@ -58,7 +58,6 @@ public class Bluetooth extends BaseActivity implements DeviceListFragment.OnFrag
         comprobarBluetooth(BTAdapter);
 
         FragmentManager fragmentManager = getSupportFragmentManager();
-
         mDeviceListFragment = DeviceListFragment.newInstance(BTAdapter);
         fragmentManager.beginTransaction().replace(R.id.container, mDeviceListFragment).commit();
 

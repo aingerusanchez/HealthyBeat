@@ -13,6 +13,7 @@ public class Aplicacion extends Application {
 
     // Variables globales
     private static ArrayList<Integer> frame = new ArrayList<Integer>();
+
     private static ArrayList<int[]> paquete = new ArrayList<int[]>();
     private static Context context = null;
 
@@ -31,18 +32,7 @@ public class Aplicacion extends Application {
         return paquete;
     }
 
-    public void setPaquete(ArrayList<int[]> paquete) {
-        this.paquete = paquete;
-    }
-
     public static ArrayList<Integer> getFrame() {
         return frame;
     }
-
-    public void setFrame(ArrayList<Integer> frame) {
-        this.frame = frame;
-    }
-
-
-
 }

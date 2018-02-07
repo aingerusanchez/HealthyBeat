@@ -7,19 +7,6 @@
     android:orientation="vertical"
     tools:context="com.aingerusanchez.healthybeat.Analizar">
 
-    <!--<FrameLayout
-        android:id="@+id/content"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
-
-        <com.jjoe64.graphview.GraphView
-            android:id="@+id/graph"
-            android:layout_width="match_parent"
-            android:layout_height="200dip" />
-
-    </FrameLayout>-->
-
     <TextView
         android:id="@+id/tv_analisis_actual"
         android:layout_width="match_parent"
@@ -36,106 +23,112 @@
         android:layout_marginStart="10dp"
         android:background="#000" />
 
-    <TableLayout
-        android:id="@+id/lv_pleth_data"
+    <FrameLayout
+        android:id="@+id/graph_content"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:stretchColumns="0,1">
+        android:layout_weight="1">
 
-        <TableRow
+        <com.jjoe64.graphview.GraphView
+            android:id="@+id/graph"
             android:layout_width="match_parent"
-            android:layout_margin="5dp">
+            android:layout_height="200dip" />
 
-            <TextView
-                android:id="@+id/tv_HR_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="HR"
-                android:textAppearance="@style/TextAppearance.AppCompat.Display2" />
+    </FrameLayout>
 
-            <TextView
-                android:id="@+id/tv_HR"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingEnd="@dimen/activity_horizontal_margin"
-                android:textAlignment="viewEnd"
-                android:textAppearance="@style/TextAppearance.AppCompat.Display2" />
-        </TableRow>
+    <GridLayout
+        android:id="@+id/grid_datos"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:columnCount="2"
+        android:rowCount="3">
 
-        <TableRow android:layout_margin="5dp">
+        <TextView
+            android:id="@+id/tv_HR_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_columnSpan="1"
+            android:layout_marginStart="10dp"
+            android:text="HR: "
+            android:textAppearance="@style/TextAppearance.AppCompat.Display2" />
 
-            <TextView
-                android:id="@+id/tv_SP02_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="SpO2"
-                android:textAppearance="@style/TextAppearance.AppCompat.Display2" />
+        <TextView
+            android:id="@+id/tv_HR"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_columnSpan="1"
+            android:text="00"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
 
-            <TextView
-                android:id="@+id/tv_SP02"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingEnd="@dimen/activity_horizontal_margin"
-                android:textAlignment="viewEnd"
-                android:textAppearance="@style/TextAppearance.AppCompat.Display2" />
-        </TableRow>
+        <TextView
+            android:id="@+id/tv_SP02_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_columnSpan="1"
+            android:layout_marginStart="10dp"
+            android:text="SpO2: "
+            android:textAppearance="@style/TextAppearance.AppCompat.Display2" />
 
-        <TableRow android:layout_margin="5dp">
+        <TextView
+            android:id="@+id/tv_SP02"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_columnSpan="1"
+            android:text="00"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
 
-            <TextView
-                android:id="@+id/tv_EHR_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="E-HR"
-                android:textAppearance="@style/TextAppearance.AppCompat.Display2" />
+        <!--<TextView
+            android:id="@+id/tv_EHR_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_columnSpan="2"
+            android:text="E-HR: "
+            android:textAppearance="@style/TextAppearance.AppCompat.Display2" />
 
-            <TextView
-                android:id="@+id/tv_EHR"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingEnd="@dimen/activity_horizontal_margin"
-                android:textAlignment="viewEnd"
-                android:textAppearance="@style/TextAppearance.AppCompat.Display2" />
-        </TableRow>
+        <TextView
+            android:id="@+id/tv_EHR"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_columnSpan="2"
+            android:text="000"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
 
-        <TableRow android:layout_margin="5dp">
+        <TextView
+            android:id="@+id/tv_ESPO2_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_columnSpan="3"
+            android:text=" E-SpO2: "
+            android:textAppearance="@style/TextAppearance.AppCompat.Display2" />
 
-            <TextView
-                android:id="@+id/tv_ESPO2_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="E-SpO2"
-                android:textAppearance="@style/TextAppearance.AppCompat.Display2" />
+        <TextView
+            android:id="@+id/tv_ESPO2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_columnSpan="1"
+            android:text="00"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display1" />-->
 
-            <TextView
-                android:id="@+id/tv_ESPO2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingEnd="@dimen/activity_horizontal_margin"
-                android:textAlignment="viewEnd"
-                android:textAppearance="@style/TextAppearance.AppCompat.Display2" />
-        </TableRow>
+        <!--Mostrar parar pruebas-->
+        <TextView
+            android:id="@+id/tv_PLETH_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_columnSpan="1"
+            android:layout_marginStart="10dp"
+            android:text="Pleth: "
+            android:textAppearance="@style/TextAppearance.AppCompat.Display2" />
 
-        <TableRow android:layout_margin="5dp">
+        <TextView
+            android:id="@+id/tv_PLETH"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_columnSpan="1"
+            android:text="00000"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
 
-            <TextView
-                android:id="@+id/tv_PLETH_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Pleth"
-                android:textAppearance="@style/TextAppearance.AppCompat.Display2" />
-
-            <TextView
-                android:id="@+id/tv_PLETH"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingEnd="@dimen/activity_horizontal_margin"
-                android:textAlignment="viewEnd"
-                android:textAppearance="@style/TextAppearance.AppCompat.Display2" />
-        </TableRow>
-
-    </TableLayout>
+    </GridLayout>
 
     <FrameLayout
         android:id="@+id/lyt_btn_analizar"
