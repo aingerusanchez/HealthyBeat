@@ -7,13 +7,8 @@ import android.util.Log;
 
 import java.util.ArrayList;
 
-/**
- * Created by Aingeru on 21/01/2018.
- */
-
 public class BluetoothDataReceiver extends BroadcastReceiver {
 
-    private static final boolean modoDebug = false;
     private static final String TAG = "BluetoothDataReceiver";
     int[] frame = null;
     private static final int sizeFrame = 5;
@@ -42,14 +37,15 @@ public class BluetoothDataReceiver extends BroadcastReceiver {
                 frame = null;
                 borrarFrame();
                 borrarPaquete();
+                Aplicacion.getPuntosGrafico().clear();
             } else {
                 Aplicacion.getFrame().add(Integer.parseInt(dato));
-                sincronizarFrame();
+                sincronizarFrame(context, intent);
             }
         }
     }
 
-    private void sincronizarFrame() {
+    private void sincronizarFrame(Context context, Intent intent) {
 
         // Empezar cuado el ArrayList de Frame tenga 5 valores
         if (Aplicacion.getFrame().size() == sizeFrame) {
@@ -68,7 +64,7 @@ public class BluetoothDataReceiver extends BroadcastReceiver {
                     if ((byte1 == 129 || byte1 == 131) && Aplicacion.getPaquete().size() == sizePaquete) {
 
                         // DEBUG: Dibujar contenido del PAQUETE
-                        if(modoDebug) {
+                        if(Aplicacion.isModoDebug()) {
                             StringBuilder datosPaquete = new StringBuilder();
                             ArrayList<int[]> paquete = Aplicacion.getPaquete();
                             for(int current_frame = 0; current_frame < sizePaquete; current_frame++) {
@@ -86,14 +82,22 @@ public class BluetoothDataReceiver extends BroadcastReceiver {
                     Aplicacion.getPaquete().add(frame);
                     sincronizarPaquete();
                 }
-                //Log.d(TAG, "FRAME: " + byte1 + " " + byte2 + " " + byte3 + " " + byte4 + " " + byte5);
+                if (Aplicacion.isModoDebug()) {
+                    Log.d(TAG, "FRAME: " + byte1 + " " + byte2 + " " + byte3 + " " + byte4 + " " + byte5);
+                }
 
                 // Devolver los datos Pleth (Byte2 y Byte3) para mostrar el HRV en UI
                 // Juntar los 2 Bytes de Pleth y mostrarlos en la UI
                 long puntoPleth = (frame[1]*256) + frame[2];
+
+                // Mandar dato pleth para dibujar el gráfico a la UIThread mediante Listener
                 if (listener != null) {
                     listener.onPlethDataUpdatingListener("Pleth", String.valueOf(puntoPleth));
                 }
+
+                // guardar los datos Pleth procesados en la clase padre 'Aplicacion'
+                Aplicacion.getPuntosGrafico().add(puntoPleth);
+
 
                 // Reiniciar el frame
                 borrarFrame();
@@ -133,7 +137,7 @@ public class BluetoothDataReceiver extends BroadcastReceiver {
         }
     }
 
-    /*Método para rellenar los Paquetes con 25 Frames*/
+    // Método para rellenar los Paquetes con 25 Frames
     private void sincronizarPaquete() {
 
         if (Aplicacion.getPaquete().size() == sizePaquete) {
@@ -142,7 +146,7 @@ public class BluetoothDataReceiver extends BroadcastReceiver {
             int HR_LSB = Aplicacion.getPaquete().get(1)[3];
             long HR = HR_MSB*256 + HR_LSB;
             int SPO2 = Aplicacion.getPaquete().get(2)[3];
-            // No se muestran en UI
+            // CHANGES: No se muestran en UI
             /*int E_HR_MSB = Aplicacion.getPaquete().get(13)[3];
             int E_HR_LSB = Aplicacion.getPaquete().get(14)[3];
             long E_HR = E_HR_MSB*256 + E_HR_LSB;
@@ -151,9 +155,9 @@ public class BluetoothDataReceiver extends BroadcastReceiver {
             if (listener != null) {
                 listener.onPlethDataUpdatingListener("HR", String.valueOf(HR));
                 listener.onPlethDataUpdatingListener("SPO2", String.valueOf(SPO2));
-                // No se muestran en UI
-                /*listener.onPlethDataUpdatingListener("E_HR", String.valueOf(E_HR));
-                listener.onPlethDataUpdatingListener("E_SP02", String.valueOf(E_SP02));*/
+                // CHANGES: No se muestran en UI
+                //listener.onPlethDataUpdatingListener("E_HR", String.valueOf(E_HR));
+                //listener.onPlethDataUpdatingListener("E_SP02", String.valueOf(E_SP02));
             }
         }
     }

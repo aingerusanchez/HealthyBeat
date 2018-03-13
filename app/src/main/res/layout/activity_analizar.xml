@@ -58,7 +58,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_columnSpan="1"
-            android:text="00"
+            android:text=""
             android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
 
         <TextView
@@ -75,7 +75,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_columnSpan="1"
-            android:text="00"
+            android:text=""
             android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
 
         <!--<TextView
@@ -108,9 +108,8 @@
             android:layout_height="wrap_content"
             android:layout_columnSpan="1"
             android:text="00"
-            android:textAppearance="@style/TextAppearance.AppCompat.Display1" />-->
+            android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
 
-        <!--Mostrar parar pruebas-->
         <TextView
             android:id="@+id/tv_PLETH_title"
             android:layout_width="wrap_content"
@@ -127,6 +126,8 @@
             android:layout_columnSpan="1"
             android:text="00000"
             android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
+
+            -->
 
     </GridLayout>
 

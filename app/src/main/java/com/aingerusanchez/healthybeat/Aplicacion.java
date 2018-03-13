@@ -13,9 +13,10 @@ public class Aplicacion extends Application {
 
     // Variables globales
     private static ArrayList<Integer> frame = new ArrayList<Integer>();
-
     private static ArrayList<int[]> paquete = new ArrayList<int[]>();
+    private static ArrayList<Long> puntosGrafico = new ArrayList<Long>();
     private static Context context = null;
+    private static boolean modoDebug = true;
 
     @Override
     public void onCreate() {
@@ -32,7 +33,10 @@ public class Aplicacion extends Application {
         return paquete;
     }
 
-    public static ArrayList<Integer> getFrame() {
-        return frame;
-    }
+    public static ArrayList<Integer> getFrame() { return frame; }
+
+    public static ArrayList<Long> getPuntosGrafico() { return puntosGrafico; }
+
+    public static boolean isModoDebug() { return modoDebug; }
+
 }
