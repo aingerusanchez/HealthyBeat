@@ -5,10 +5,6 @@ import android.content.Context;
 
 import java.util.ArrayList;
 
-/**
- * Created by Aingeru on 21/01/2018.
- */
-
 public class Aplicacion extends Application {
 
     // Variables globales
@@ -16,7 +12,7 @@ public class Aplicacion extends Application {
     private static ArrayList<int[]> paquete = new ArrayList<int[]>();
     private static ArrayList<Long> puntosGrafico = new ArrayList<Long>();
     private static Context context = null;
-    private static boolean modoDebug = true;
+    private static boolean modoDebug = false;
 
     @Override
     public void onCreate() {

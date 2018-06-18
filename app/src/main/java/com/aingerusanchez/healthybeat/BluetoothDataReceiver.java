@@ -3,20 +3,35 @@ package com.aingerusanchez.healthybeat;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 
 public class BluetoothDataReceiver extends BroadcastReceiver {
 
+    // CONSTANTES
     private static final String TAG = "BluetoothDataReceiver";
-    int[] frame = null;
     private static final int sizeFrame = 5;
     private static final int sizePaquete = 25;
+    protected static final int REQ_CREATE_FILE = 1001;
+
+    // Variables de clase
+    private Context context;
+
+    // Variables para datos pletismograficos
+    private int[] frame = null;
+    FileOutputStream fos = null;
 
     // LISTENER para actualizar información en UI
-    public interface OnPlethDataUpdatingListener {
+    public interface OnPlethDataUpdatingListener extends GoogleApiClient.OnConnectionFailedListener {
         public void onPlethDataUpdatingListener(String key, String value);
+
+        void onConnectionFailed(@NonNull ConnectionResult connectionResult);
     }
 
     private OnPlethDataUpdatingListener listener = null;
@@ -27,18 +42,31 @@ public class BluetoothDataReceiver extends BroadcastReceiver {
     }
 
     @Override
-    public void onReceive(Context context, Intent intent) {
+    public void onReceive(Context pContext, Intent intent) {
+
+        // Guardar Contexto en variable de clase para usarlo en el Receiver
+        context = pContext;
+
+        // Crear archivo para guardar registro de la muestra
+
+
 
         if (intent.getExtras() != null) {
             // Recibe nuevo dato
             String dato = intent.getExtras().getString("Dato");
             // Si el dato recibido == 'reset' se inicializan las estructuras de datos
-            if(dato == null || "reset".equals(dato)){
+            if(dato == null || Analizar.RESET_DATA.equals(dato)){
                 frame = null;
                 borrarFrame();
                 borrarPaquete();
                 Aplicacion.getPuntosGrafico().clear();
             } else {
+                // Enviar dato para guardar todos los datos preprocesados
+                /*
+                if (listener != null) {
+                    listener.onPlethDataUpdatingListener("Dato", String.valueOf(dato));
+                }*/
+                // Parsear datos
                 Aplicacion.getFrame().add(Integer.parseInt(dato));
                 sincronizarFrame(context, intent);
             }
@@ -161,6 +189,4 @@ public class BluetoothDataReceiver extends BroadcastReceiver {
             }
         }
     }
-
-
 }

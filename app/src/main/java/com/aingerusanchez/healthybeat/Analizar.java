@@ -6,12 +6,22 @@ import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.drive.Drive;
+import com.google.android.gms.drive.DriveApi;
+import com.google.android.gms.drive.DriveContents;
+import com.google.android.gms.drive.DriveFolder;
+import com.google.android.gms.drive.DriveId;
+import com.google.android.gms.drive.MetadataChangeSet;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.GridLabelRenderer;
 import com.jjoe64.graphview.series.DataPoint;
@@ -20,13 +30,24 @@ import com.jjoe64.graphview.series.LineGraphSeries;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 
 import static android.graphics.Color.TRANSPARENT;
 
 public class Analizar extends BaseActivity implements BluetoothDataReceiver.OnPlethDataUpdatingListener {
 
-    // Variables de la clase
+    // CONSTANTES
     private static final String TAG = Analizar.class.getSimpleName();
+    public static final String RESET_DATA = "RESET";
+    public static final String FLUSH_DATA = "FLUSH";
+
+    // Variables de la clase
     Context context = Analizar.this;
 
     // Variables de GraphView
@@ -47,7 +68,6 @@ public class Analizar extends BaseActivity implements BluetoothDataReceiver.OnPl
     long longPleth = 0;
 
     // Variables de acceso a UI
-
     TextView tvHR;
     TextView tvSPO2;
     /*TextView tvPleth;
@@ -55,7 +75,14 @@ public class Analizar extends BaseActivity implements BluetoothDataReceiver.OnPl
     TextView tvE_SPO2;*/
     ToggleButton btnAnalizar;
 
+    // Variables para API Google Drive
+    private GoogleApiClient apiClient;
+    private DriveId carpetaDriveId = null;
+    private ArrayList<String> muestra = null;
 
+    // Fecha y formato
+    DateFormat df = null;
+    String date = "";
 
     @Override
     int getContentViewId() {
@@ -112,6 +139,26 @@ public class Analizar extends BaseActivity implements BluetoothDataReceiver.OnPl
 
         // --------------------------------- END GRAPHVIEW ------------------------------------- //
 
+        // Crear DRIVE API CLIENT
+        apiClient = new GoogleApiClient.Builder(context)
+                .enableAutoManage(this, this)
+                .addApi(Drive.API)
+                .addScope(Drive.SCOPE_FILE)
+                /* Para manejar los errores manualmente
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                */
+                .build();
+
+        // Definir formato de fechas
+        df = new SimpleDateFormat("yyyy-MM-dd");
+        date = df.format(Calendar.getInstance().getTime());
+
+        // Fichero para guardar muestra
+        muestra = new ArrayList<>();
+
+
+
         btnAnalizar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -129,6 +176,10 @@ public class Analizar extends BaseActivity implements BluetoothDataReceiver.OnPl
                     }
                 } else {
                     // Al pulsar DETENER:
+                    // Guadar muestra en Google Drive
+                    createFolder("Muestra Healthybeat " + date);
+                    subirMuestraDrive();
+                    // Detener análisis
                     if (analizador != null) {
                         analizador.cancel(true);
                         analizador = null;
@@ -163,7 +214,16 @@ public class Analizar extends BaseActivity implements BluetoothDataReceiver.OnPl
     public void onPlethDataUpdatingListener(String key, String value) {
 
             switch (key) {
+                /*
+                Para guardar todos los datos en crudo
+                case "Dato":
+                    //Log.d(TAG, "Dato: " + value);
+                    muestra.add(value);
+                    break;*/
                 case "Pleth":
+                    // Añadir a muestra para subir a Drive
+                    muestra.add(value);
+                    // Dibujar gráfico
                     if ( !Aplicacion.getPuntosGrafico().isEmpty() ) {
                         if(Aplicacion.isModoDebug()) {
                             longPleth = Long.parseLong(value);
@@ -195,7 +255,16 @@ public class Analizar extends BaseActivity implements BluetoothDataReceiver.OnPl
             }
     }
 
-    //------------------ MÉTODOS PARA PINTAR EL GRÁFICO -----------------//
+/*    private void rellenarMuestra(String dato) {
+        try {
+            out.write(dato + ",");
+            out.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }*/
+
+    //------------------ METODOS PARA PINTAR EL GRAFICO -----------------//
 
     // Método para reiniciar las variables de pintado del gráfico
     private void iniciarVariables() {
@@ -208,47 +277,18 @@ public class Analizar extends BaseActivity implements BluetoothDataReceiver.OnPl
         graph.addSeries(series);
     }
 
-    // Método para insertar los nuevos puntos del eje Y
+    // Metodo para insertar los nuevos puntos del eje Y
     private void pintarGrafico() {
 
         long graphPoint = Aplicacion.getPuntosGrafico().remove(0);
         series.appendData(new DataPoint(lastX, graphPoint), true, 1000);
         lastX++;
-
-        // Para simular el renderizado del gráfico en tiempo real. Comentado junto a 'addEntry()'
-        /*new Thread(new Runnable() {
-
-            @Override
-            public void run() {
-                // we add 100 new entries
-                for (int i = 0; i < 100; i++) {
-                    runOnUiThread(new Runnable() {
-
-                        @Override
-                        public void run() {
-                            addEntry();
-                        }
-                    });
-
-                    // sleep to slow down the add of entries
-                    try {
-                        Thread.sleep(1000); // default 600
-                    } catch (InterruptedException e) {
-                        Log.e(TAG + "pintarGrafico() ", "InterruptedException: " + e);
-                    }
-                }
-            }
-        }).start();*/
     }
 
-    // CHANGES: Descomentar para simular el renderizado el tiempo real
-    /*private void addEntry() {
-        if ( !Aplicacion.getPuntosGrafico().isEmpty() ) {
-            long graphPoint = Aplicacion.getPuntosGrafico().remove(0);
-            // here, we choose to display max 10 points on the viewport and we scroll to end
-            series.appendData(new DataPoint(lastX++, graphPoint), true, 1000);
-        }
-    }*/
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+
+    }
 
     //------------------- FIN MÉTODOS PARA PINTAR EL GRÁFICO ----------------//
 
@@ -287,14 +327,10 @@ public class Analizar extends BaseActivity implements BluetoothDataReceiver.OnPl
 
             while(btnAnalizar.isChecked()) {
 
-                if(isCancelled()) {
-                    break;
-                }
-
                 // Leer el archivo "datos.csv" para simular la entrada de datos
                 String csvFile = "datos.csv";
                 String[] datos = CSVReader(csvFile);
-                // Procesar los datos recividos
+                // Procesar los datos recibidos
                 procesarDatosRecevier(datos);
 
                 // Mostrar los datos periodicamente en el UIThread
@@ -322,6 +358,8 @@ public class Analizar extends BaseActivity implements BluetoothDataReceiver.OnPl
         // Recibe como parámetro el resultado devuelto por doInBackground(Params).
         **/
         protected void onPostExecute(Boolean correcto) {
+            // Mandar dato para finalizar registros y subirlo a Google Drive
+            procesarDatosRecevier(new String[]{FLUSH_DATA});
             // Desactivar el RECEIVER
             unregisterReceiver(receiver);
             Toast.makeText(context, "Se ha terminado el análisis", Toast.LENGTH_SHORT ).show();
@@ -333,6 +371,9 @@ public class Analizar extends BaseActivity implements BluetoothDataReceiver.OnPl
         **/
         @Override
         protected void onCancelled() {
+            // Mandar dato para finalizar registros y subirlo a Google Drive
+            procesarDatosRecevier(new String[]{FLUSH_DATA});
+
             // Desactivar el RECEIVER
             unregisterReceiver(receiver);
             Toast.makeText(context, "Se ha detenido el análisis", Toast.LENGTH_SHORT ).show();
@@ -350,7 +391,7 @@ public class Analizar extends BaseActivity implements BluetoothDataReceiver.OnPl
             registerReceiver(receiver, new IntentFilter("com.aingerusanchez.healthybeat.RECIBIR_DATOS"));
             intentReceiver = new Intent("com.aingerusanchez.healthybeat.RECIBIR_DATOS");
             // Mandar 1.dato al RECEIVER parar inicializar las estrucutras de datos
-            intentReceiver.putExtra("Dato", "reset");
+            intentReceiver.putExtra("Dato", RESET_DATA);
             sendBroadcast(intentReceiver);
 
             for(String dato : datos) {
@@ -358,11 +399,6 @@ public class Analizar extends BaseActivity implements BluetoothDataReceiver.OnPl
                 if(isCancelled()) {
                     break;
                 }
-                // (INITIAL CODE) Mandar datos al Receiver
-                /*registerReceiver(receiver, new IntentFilter("com.aingerusanchez.healthybeat.RECIBIR_DATOS"));
-                intentReceiver = new Intent("com.aingerusanchez.healthybeat.RECIBIR_DATOS");
-                intentReceiver.putExtra("Dato", dato);
-                sendBroadcast(intentReceiver);*/
 
                 registerReceiver(receiver, new IntentFilter("com.aingerusanchez.healthybeat.RECIBIR_DATOS"));
                 intentReceiver.putExtra("Dato", dato);
@@ -394,5 +430,100 @@ public class Analizar extends BaseActivity implements BluetoothDataReceiver.OnPl
 
     }
     // -------------------- FIN CLASE ASINCRONA (AsyncTask) --------------------
+
+    // ------------------- API GOOGLE DRIVE ---------------------
+    private void subirMuestraDrive() {
+        new Thread() {
+            @Override
+            public void run() {
+                createFile("Muestra_" + date);
+            }
+        }.start();
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        Toast.makeText(context, "Error de conexión", Toast.LENGTH_SHORT).show();
+        Log.e(TAG, "OnConnectionFailed: " + connectionResult);
+    }
+
+    private void createFolder(final String foldername) {
+
+        MetadataChangeSet changeSet =
+                new MetadataChangeSet.Builder()
+                        .setTitle(foldername)
+                        .build();
+
+        // Directorio raíz de Google Drive
+        DriveFolder folder = Drive.DriveApi.getRootFolder(apiClient);
+
+        // Opción 2: Carpeta de Aplicación (App Folder)
+        //DriveFolder folder = Drive.DriveApi.getAppFolder(apiClient);
+
+        folder.createFolder(apiClient, changeSet).setResultCallback(
+                new ResultCallback<DriveFolder.DriveFolderResult>() {
+                    @Override
+                    public void onResult(DriveFolder.DriveFolderResult result) {
+                        if (result.getStatus().isSuccess()) {
+                            Log.i(TAG, "Carpeta creada con ID = " + result.getDriveFolder().getDriveId());
+                            carpetaDriveId = result.getDriveFolder().getDriveId();
+                        } else {
+                            Log.e(TAG, "Error al crear carpeta");
+                        }
+                    }
+                });
+    }
+
+    private void createFile(final String filename) {
+
+        Drive.DriveApi.newDriveContents(apiClient)
+                .setResultCallback(new ResultCallback<DriveApi.DriveContentsResult>() {
+                    @Override
+                    public void onResult(DriveApi.DriveContentsResult result) {
+                        if (result.getStatus().isSuccess()) {
+
+                            writeData(result.getDriveContents());
+
+                            MetadataChangeSet changeSet =
+                                    new MetadataChangeSet.Builder()
+                                            .setTitle(filename)
+                                            .setMimeType("text/plain")
+                                            // TODO: .setMimeType("text/excel")
+                                            .build();
+
+                            // Carpeta creada al inicio del muestreo
+                            DriveFolder folder = carpetaDriveId.asDriveFolder();
+
+                            folder.createFile(apiClient, changeSet, result.getDriveContents())
+                                    .setResultCallback(new ResultCallback<DriveFolder.DriveFileResult>() {
+                                        @Override
+                                        public void onResult(DriveFolder.DriveFileResult result) {
+                                            if (result.getStatus().isSuccess()) {
+                                                Log.i(TAG, "Fichero creado con ID = " + result.getDriveFile().getDriveId());
+                                            } else {
+                                                Log.e(TAG, "Error al crear el fichero");
+                                            }
+                                        }
+                                    });
+                        } else {
+                            Log.e(TAG, "Error al crear DriveContents");
+                        }
+                    }
+                });
+    }
+
+    private void writeData(DriveContents driveContents) {
+        OutputStream outputStream = driveContents.getOutputStream();
+        Writer writer = new OutputStreamWriter(outputStream);
+
+        try {
+            for(String dato : muestra) {
+                writer.write(dato + ",");
+            }
+            writer.close();
+        } catch (IOException e) {
+            Log.e(TAG, "Error al escribir en el fichero: " + e.getMessage());
+        }
+    }
 
 }

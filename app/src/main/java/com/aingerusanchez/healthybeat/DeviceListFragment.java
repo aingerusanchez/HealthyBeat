@@ -1,5 +1,6 @@
 package com.aingerusanchez.healthybeat;
 
+import android.Manifest;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -261,7 +262,11 @@ public class DeviceListFragment extends Fragment implements AbsListView.OnItemCl
             BluetoothDevice btDevice = bTAdapter.getRemoteDevice(deviceItemList.get(position).getAddress());
             btDevice.createBond();
             // Detener el escanear una vez vinculado a un dispositivo
-            getActivity().unregisterReceiver(bReciever);
+            try {
+                getActivity().unregisterReceiver(bReciever);
+            } catch (Exception e) {
+                e.getStackTrace();
+            }
             bTAdapter.cancelDiscovery();
         }
 
