@@ -16,17 +16,17 @@ public class ConnectThread extends Thread {
         try {
             temp = bTDevice.createRfcommSocketToServiceRecord(mUUID);
         } catch (IOException e) {
-            Log.d("CONNECTTHREAD","Could not create RFCOMM socket:" + e.toString());
+            Log.d("CONNECTTHREAD","No se puede crear el socket RFCOMM:" + e.toString());
             return false;
         }
         try {
             bTSocket.connect();
         } catch(IOException e) {
-            Log.d("CONNECTTHREAD","Could not connect: " + e.toString());
+            Log.d("CONNECTTHREAD","No se puede conectar: " + e.toString());
             try {
                 bTSocket.close();
             } catch(IOException close) {
-                Log.d("CONNECTTHREAD", "Could not close connection:" + e.toString());
+                Log.d("CONNECTTHREAD", "No se puede cerrar la conexión:" + e.toString());
                 return false;
             }
         }
@@ -37,7 +37,7 @@ public class ConnectThread extends Thread {
         try {
             bTSocket.close();
         } catch(IOException e) {
-            Log.d("CONNECTTHREAD","Could not close connection:" + e.toString());
+            Log.d("CONNECTTHREAD","No se puede cerrar la conexión:" + e.toString());
             return false;
         }
         return true;

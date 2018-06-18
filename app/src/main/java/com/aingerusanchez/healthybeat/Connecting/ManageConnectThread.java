@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-// Está clase es la responsable de mandar/recibir datos desde el dispositivo Bluetooth conectado.
+// Está clase es la responsable de mandar/recibir datos desde el dispositivo Bluetooth conectado
 public class ManageConnectThread extends Thread {
 
     public ManageConnectThread() { }

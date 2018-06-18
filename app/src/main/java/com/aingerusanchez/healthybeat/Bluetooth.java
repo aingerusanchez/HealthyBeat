@@ -7,15 +7,18 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 public class Bluetooth extends BaseActivity implements DeviceListFragment.OnFragmentInteractionListener {
 
+    // CONSTANTES
+    public static int REQUEST_BLUETOOTH = 1;
+
     // Variables
     private BluetoothAdapter BTAdapter;
     private DeviceListFragment mDeviceListFragment;
-    // Constantes
-    public static int REQUEST_BLUETOOTH = 1;
 
 
     @Override
@@ -31,7 +34,7 @@ public class Bluetooth extends BaseActivity implements DeviceListFragment.OnFrag
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_bluetooth);
+        //setContentView(R.layout.activity_bluetooth); lo hereda de BaseActivity
 
         BTAdapter = BluetoothAdapter.getDefaultAdapter();
 
@@ -48,21 +51,18 @@ public class Bluetooth extends BaseActivity implements DeviceListFragment.OnFrag
                     })
                     .setIcon(android.R.drawable.ic_dialog_alert)
                     .show();
-            // TODO: Al finalizar los test en el emulador de Android Studio, cambiar el Toast por el Dialog
+            // Para pruebas
             /*Toast toast = Toast.makeText(getApplicationContext(), R.string.bluetooth_no_soportado, Toast.LENGTH_LONG);
             toast.setGravity(Gravity.CENTER | Gravity.CENTER, 0, 0);
             toast.show();*/
         }
 
-        // Método para veríficar que el Bluetooth esté activado
+        // Veríficar que el Bluetooth esté activado
         comprobarBluetooth(BTAdapter);
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         mDeviceListFragment = DeviceListFragment.newInstance(BTAdapter);
         fragmentManager.beginTransaction().replace(R.id.container, mDeviceListFragment).commit();
-
-        /*Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);*/
 
     }
 
@@ -74,7 +74,6 @@ public class Bluetooth extends BaseActivity implements DeviceListFragment.OnFrag
 
     public void comprobarBluetooth(BluetoothAdapter BTAdapter) {
 
-        // Verificar si el Bluetooth está activado
         if (!BTAdapter.isEnabled()) {
 
             new AlertDialog.Builder(this)
@@ -100,6 +99,21 @@ public class Bluetooth extends BaseActivity implements DeviceListFragment.OnFrag
         }
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.navigation, menu);
+        return true;
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        return super.onOptionsItemSelected(item);
+    }
 
 }

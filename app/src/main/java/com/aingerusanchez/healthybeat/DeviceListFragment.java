@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
@@ -48,6 +49,9 @@ public class DeviceListFragment extends Fragment implements AbsListView.OnItemCl
     private static int requestCodePermission = 1;
     private static int requestPermissionOK = 1;
     private static int requestPermissionFAIL = -1;
+
+    // Elemento de UI
+    private ToggleButton scan;
 
     /**
      * The fragment's ListView/GridView.
@@ -193,7 +197,7 @@ public class DeviceListFragment extends Fragment implements AbsListView.OnItemCl
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_deviceitem_list, container, false);
-        ToggleButton scan = (ToggleButton) view.findViewById(R.id.scan);
+        scan = (ToggleButton) view.findViewById(R.id.scan);
 
         // Set the adapter
         mListView = (AbsListView) view.findViewById(android.R.id.list);
@@ -204,33 +208,42 @@ public class DeviceListFragment extends Fragment implements AbsListView.OnItemCl
 
         scan.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
-                // Variables del Toast
-                Context context = getContext();
-                String tstScanText = "";
-                int duracion = Toast.LENGTH_SHORT;
-                Toast tstScan;
+                final IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
 
                 if (isChecked) {
-                    // TODO: dejar de escanear al transcurrir 30 segundos
-                    mAdapter.clear();
-                    getActivity().registerReceiver(bReciever, filter);
-                    bTAdapter.startDiscovery();
-                    tstScanText = "Buscando dispositivos Bluetooth";
-                    tstScan = Toast.makeText(context, tstScanText, duracion);
-                    tstScan.show();
+                    // Dejar de escanear al transcurrir 30 segundos
+                    new CountDownTimer(30000, 30000) {
+
+                        public void onTick(long millisUntilFinished) {
+                            iniciarBusqueda(filter);
+                        }
+
+                        public void onFinish() {
+                            scan.toggle();
+                        }
+                    }.start();
+
                 } else {
-                    getActivity().unregisterReceiver(bReciever);
-                    bTAdapter.cancelDiscovery();
-                    tstScanText = "Parando busqueda";
-                    tstScan = Toast.makeText(context, tstScanText, duracion);
-                    tstScan.show();
+                    detenerBusqueda();
                 }
             }
         });
 
         return view;
     }
+    private void iniciarBusqueda(IntentFilter filter) {
+        mAdapter.clear();
+        getActivity().registerReceiver(bReciever, filter);
+        bTAdapter.startDiscovery();
+        Toast.makeText(getContext(), "Buscando dispositivos Bluetooth", Toast.LENGTH_SHORT).show();
+    }
+
+    private void detenerBusqueda() {
+        getActivity().unregisterReceiver(bReciever);
+        bTAdapter.cancelDiscovery();
+        Toast.makeText(getContext(), "Parando busqueda", Toast.LENGTH_SHORT).show();
+    }
+
 
     @Override
     public void onAttach(Activity activity) {
@@ -262,16 +275,10 @@ public class DeviceListFragment extends Fragment implements AbsListView.OnItemCl
             BluetoothDevice btDevice = bTAdapter.getRemoteDevice(deviceItemList.get(position).getAddress());
             btDevice.createBond();
             // Detener el escanear una vez vinculado a un dispositivo
-            try {
-                getActivity().unregisterReceiver(bReciever);
-            } catch (Exception e) {
-                e.getStackTrace();
-            }
-            bTAdapter.cancelDiscovery();
+            scan.toggle();
         }
 
     }
-
     /**
      * The default content for this Fragment has a TextView that is shown when
      * the list is empty. If you would like to change the text, call this method
