@@ -14,7 +14,8 @@
         android:layout_margin="10dp"
         android:text="@string/analisis_actual"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:visibility="gone" />
 
     <View
         android:layout_width="match_parent"
@@ -32,7 +33,7 @@
         <com.jjoe64.graphview.GraphView
             android:id="@+id/graph"
             android:layout_width="match_parent"
-            android:layout_height="200dip" />
+            android:layout_height="match_parent" />
 
     </FrameLayout>
 
@@ -42,7 +43,8 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:columnCount="2"
-        android:rowCount="3">
+        android:rowCount="3"
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/tv_HR_title"
@@ -136,7 +138,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:elevation="2dp" >
+        android:elevation="2dp"
+        android:visibility="gone">
 
         <ToggleButton
             android:id="@+id/btn_analizar"

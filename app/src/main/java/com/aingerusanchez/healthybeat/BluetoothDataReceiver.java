@@ -3,23 +3,35 @@ package com.aingerusanchez.healthybeat;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
-import java.util.ArrayList;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
 
-/**
- * Created by Aingeru on 21/01/2018.
- */
+import java.io.FileOutputStream;
+import java.util.ArrayList;
 
 public class BluetoothDataReceiver extends BroadcastReceiver {
 
-    private static final boolean modoDebug = true;
+    // CONSTANTES
     private static final String TAG = "BluetoothDataReceiver";
-    int[] frame = null;
+    private static final int sizeFrame = 5;
+    private static final int sizePaquete = 25;
+    protected static final int REQ_CREATE_FILE = 1001;
 
-    // 25-01-2018: Añadir Listener para actualizar información en UI
-    public interface OnPlethDataUpdatingListener {
+    // Variables de clase
+    private Context context;
+
+    // Variables para datos pletismograficos
+    private int[] frame = null;
+    FileOutputStream fos = null;
+
+    // LISTENER para actualizar información en UI
+    public interface OnPlethDataUpdatingListener extends GoogleApiClient.OnConnectionFailedListener {
         public void onPlethDataUpdatingListener(String key, String value);
+
+        void onConnectionFailed(@NonNull ConnectionResult connectionResult);
     }
 
     private OnPlethDataUpdatingListener listener = null;
@@ -30,50 +42,64 @@ public class BluetoothDataReceiver extends BroadcastReceiver {
     }
 
     @Override
-    public void onReceive(Context context, Intent intent) {
+    public void onReceive(Context pContext, Intent intent) {
+
+        // Guardar Contexto en variable de clase para usarlo en el Receiver
+        context = pContext;
+
+        // Crear archivo para guardar registro de la muestra
+
+
 
         if (intent.getExtras() != null) {
-            // Recive nuevo dato
+            // Recibe nuevo dato
             String dato = intent.getExtras().getString("Dato");
-            // Se envia el valor '-1' en el primer dato al comenzar el análisis
-            if(dato == null || "-1".equals(dato)){
-                // Se reinician todos las estructuras de datos utilizadas seguidamente
+            // Si el dato recibido == 'reset' se inicializan las estructuras de datos
+            if(dato == null || Analizar.RESET_DATA.equals(dato)){
                 frame = null;
                 borrarFrame();
                 borrarPaquete();
+                Aplicacion.getPuntosGrafico().clear();
             } else {
+                // Enviar dato para guardar todos los datos preprocesados
+                /*
+                if (listener != null) {
+                    listener.onPlethDataUpdatingListener("Dato", String.valueOf(dato));
+                }*/
+                // Parsear datos
                 Aplicacion.getFrame().add(Integer.parseInt(dato));
-                sincronizarFrame(context);
+                sincronizarFrame(context, intent);
             }
         }
     }
 
-    private void sincronizarFrame(Context context) {
+    private void sincronizarFrame(Context context, Intent intent) {
 
-        // Esperar hasta que el ArrayList de Frame tenga 5 valores
-        if (Aplicacion.getFrame().size() == 5) {
+        // Empezar cuado el ArrayList de Frame tenga 5 valores
+        if (Aplicacion.getFrame().size() == sizeFrame) {
             int byte1 = Aplicacion.getFrame().get(0);
             int byte2 = Aplicacion.getFrame().get(1);
             int byte3 = Aplicacion.getFrame().get(2);
             int byte4 = Aplicacion.getFrame().get(3);
             int byte5 = Aplicacion.getFrame().get(4);
 
-            // Si el RESTO de la suma de los 4 primeros Bytes entre 256, es igual al 5.Byte, tenemos un FRAME sincronizado
+            // CHK: Si el resto de la suma de los 4 primeros bytes entre 256, es igual al 5.byte: estamos sincronizados a nivel de Frame
             if ((byte1+byte2+byte3+byte4) % 256 == byte5) {
                 frame = new int[]{byte1, byte2, byte3, byte4, byte5};
-                // Sí el 1.Byte del Frame es '129' o '131', significa que es el primer Frame del paquete
+                // Sí el 1.byte del Frame es '129' o '131': estamos sincronizados a nivel de Paquete
                 if((byte1 == 129 || byte1 == 131) || Aplicacion.getPaquete().size() >= 1) {
-                    if ((byte1 == 129 || byte1 == 131) && Aplicacion.getPaquete().size() == 25) {
+                    // Si ya hemos procesado un paquete
+                    if ((byte1 == 129 || byte1 == 131) && Aplicacion.getPaquete().size() == sizePaquete) {
 
                         // DEBUG: Dibujar contenido del PAQUETE
-                        if(modoDebug) {
-                            String datosPaquete = "";
+                        if(Aplicacion.isModoDebug()) {
+                            StringBuilder datosPaquete = new StringBuilder();
                             ArrayList<int[]> paquete = Aplicacion.getPaquete();
-                            for(int current_frame = 0; current_frame < 25; current_frame++) {
-                                for(int byte_actual = 0; byte_actual < 5; byte_actual++) {
-                                    datosPaquete += paquete.get(current_frame)[byte_actual] +",";
+                            for(int current_frame = 0; current_frame < sizePaquete; current_frame++) {
+                                for(int byte_actual = 0; byte_actual < sizeFrame; byte_actual++) {
+                                    datosPaquete.append(paquete.get(current_frame)[byte_actual]).append(",");
                                 }
-                                datosPaquete += "\r\n";
+                                datosPaquete.append("\r\n");
                             }
                             Log.d(TAG, "PAQUETE: " + datosPaquete);
                         }
@@ -84,14 +110,22 @@ public class BluetoothDataReceiver extends BroadcastReceiver {
                     Aplicacion.getPaquete().add(frame);
                     sincronizarPaquete();
                 }
-                //Log.d(TAG, "FRAME: " + byte1 + " " + byte2 + " " + byte3 + " " + byte4 + " " + byte5);
+                if (Aplicacion.isModoDebug()) {
+                    Log.d(TAG, "FRAME: " + byte1 + " " + byte2 + " " + byte3 + " " + byte4 + " " + byte5);
+                }
 
                 // Devolver los datos Pleth (Byte2 y Byte3) para mostrar el HRV en UI
                 // Juntar los 2 Bytes de Pleth y mostrarlos en la UI
-                int puntoPleth = (frame[1]*256) + frame[2];
+                long puntoPleth = (frame[1]*256) + frame[2];
+
+                // Mandar dato pleth para dibujar el gráfico a la UIThread mediante Listener
                 if (listener != null) {
                     listener.onPlethDataUpdatingListener("Pleth", String.valueOf(puntoPleth));
                 }
+
+                // guardar los datos Pleth procesados en la clase padre 'Aplicacion'
+                Aplicacion.getPuntosGrafico().add(puntoPleth);
+
 
                 // Reiniciar el frame
                 borrarFrame();
@@ -102,6 +136,7 @@ public class BluetoothDataReceiver extends BroadcastReceiver {
             }
 
         }
+        // ELSE: esperar que se rellene el FRAME con 5 datos
     }
 
     private void borrarFrame() {
@@ -130,28 +165,28 @@ public class BluetoothDataReceiver extends BroadcastReceiver {
         }
     }
 
-    /*Método para rellenar los Paquetes con 25 Frames*/
+    // Método para rellenar los Paquetes con 25 Frames
     private void sincronizarPaquete() {
 
-        if (Aplicacion.getPaquete().size() == 25) {
+        if (Aplicacion.getPaquete().size() == sizePaquete) {
             // Devolver los datos significativos (HR, SpO2...) para mostrar en UI
             int HR_MSB = Aplicacion.getPaquete().get(0)[3];
             int HR_LSB = Aplicacion.getPaquete().get(1)[3];
-            int HR = HR_MSB*256 + HR_LSB;
+            long HR = HR_MSB*256 + HR_LSB;
             int SPO2 = Aplicacion.getPaquete().get(2)[3];
-            int E_HR_MSB = Aplicacion.getPaquete().get(13)[3];
+            // CHANGES: No se muestran en UI
+            /*int E_HR_MSB = Aplicacion.getPaquete().get(13)[3];
             int E_HR_LSB = Aplicacion.getPaquete().get(14)[3];
-            int E_HR = E_HR_MSB*256 + E_HR_LSB;
-            int E_SP02 = Aplicacion.getPaquete().get(15)[3];
+            long E_HR = E_HR_MSB*256 + E_HR_LSB;
+            int E_SP02 = Aplicacion.getPaquete().get(15)[3];*/
 
             if (listener != null) {
                 listener.onPlethDataUpdatingListener("HR", String.valueOf(HR));
                 listener.onPlethDataUpdatingListener("SPO2", String.valueOf(SPO2));
-                listener.onPlethDataUpdatingListener("E_HR", String.valueOf(E_HR));
-                listener.onPlethDataUpdatingListener("E_SP02", String.valueOf(E_SP02));
+                // CHANGES: No se muestran en UI
+                //listener.onPlethDataUpdatingListener("E_HR", String.valueOf(E_HR));
+                //listener.onPlethDataUpdatingListener("E_SP02", String.valueOf(E_SP02));
             }
         }
     }
-
-
 }

@@ -45,7 +45,9 @@
         <!--RECEIVER-->
         <receiver android:enabled="true" android:exported="true" android:name=".BluetoothDataReceiver">
             <intent-filter>
+                <!--El RECEIVER solo escucha al Broadcast con esta ACTION-->
                 <action android:name="com.aingerusanchez.healthybeat.RECIBIR_DATOS"/>
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </receiver>
     </application>

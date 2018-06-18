@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.aingerusanchez.healthybeat.Analizar">
+
+    <TextView
+        android:id="@+id/tv_analisis_actual"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:text="@string/analisis_actual"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:textStyle="bold" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginStart="10dp"
+        android:background="#000" />
+
+    <!--<FrameLayout
+        android:id="@+id/graph_content"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <com.jjoe64.graphview.GraphView
+            android:id="@+id/graph"
+            android:layout_width="match_parent"
+            android:layout_height="200dip" />
+
+    </FrameLayout>-->
+
+    <TableLayout
+        android:id="@+id/lv_pleth_data"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:stretchColumns="0,1">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_margin="5dp">
+
+            <TextView
+                android:id="@+id/tv_HR_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="HR"
+                android:textAppearance="@style/TextAppearance.AppCompat.Display2" />
+
+            <TextView
+                android:id="@+id/tv_HR"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingEnd="@dimen/activity_horizontal_margin"
+                android:textAlignment="viewEnd"
+                android:textAppearance="@style/TextAppearance.AppCompat.Display2" />
+        </TableRow>
+
+        <TableRow android:layout_margin="5dp">
+
+            <TextView
+                android:id="@+id/tv_SP02_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="SpO2"
+                android:textAppearance="@style/TextAppearance.AppCompat.Display2" />
+
+            <TextView
+                android:id="@+id/tv_SP02"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingEnd="@dimen/activity_horizontal_margin"
+                android:textAlignment="viewEnd"
+                android:textAppearance="@style/TextAppearance.AppCompat.Display2" />
+        </TableRow>
+
+        <TableRow android:layout_margin="5dp">
+
+            <TextView
+                android:id="@+id/tv_EHR_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="E-HR"
+                android:textAppearance="@style/TextAppearance.AppCompat.Display2" />
+
+            <TextView
+                android:id="@+id/tv_EHR"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingEnd="@dimen/activity_horizontal_margin"
+                android:textAlignment="viewEnd"
+                android:textAppearance="@style/TextAppearance.AppCompat.Display2" />
+        </TableRow>
+
+        <TableRow android:layout_margin="5dp">
+
+            <TextView
+                android:id="@+id/tv_ESPO2_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="E-SpO2"
+                android:textAppearance="@style/TextAppearance.AppCompat.Display2" />
+
+            <TextView
+                android:id="@+id/tv_ESPO2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingEnd="@dimen/activity_horizontal_margin"
+                android:textAlignment="viewEnd"
+                android:textAppearance="@style/TextAppearance.AppCompat.Display2" />
+        </TableRow>
+
+        <TableRow android:layout_margin="5dp">
+
+            <TextView
+                android:id="@+id/tv_PLETH_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pleth"
+                android:textAppearance="@style/TextAppearance.AppCompat.Display2" />
+
+            <TextView
+                android:id="@+id/tv_PLETH"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingEnd="@dimen/activity_horizontal_margin"
+                android:textAlignment="viewEnd"
+                android:textAppearance="@style/TextAppearance.AppCompat.Display2" />
+        </TableRow>
+
+    </TableLayout>
+
+
+
+    <FrameLayout
+        android:id="@+id/lyt_btn_analizar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:elevation="2dp" >
+
+        <ToggleButton
+            android:id="@+id/btn_analizar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:checked="false"
+            android:text="@string/title_analizar"
+            android:textOff="@string/title_analizar"
+            android:textOn="@string/detener_analisis" />
+
+    </FrameLayout>
+
+    <include
+        layout="@layout/activity_base"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom" />
+
+</LinearLayout>
+
+
